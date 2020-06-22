@@ -1,0 +1,46 @@
+{
+  "name": "<%= name %>",
+  "version": "1.0.0",
+  "author": "<%= projectAuthor %>",
+  "description": "",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node index.js",
+    "start": "node index.js",
+    "s": "node index",
+    "add-model": "yo apollo-server-with-mongodb:add-model",
+    "add-fields": "yo apollo-server-with-mongodb:add-fields",
+    "add-estimates": "yo apollo-server-with-mongodb:add-estimates",
+    "delete-fields": "yo apollo-server-with-mongodb:delete-fields",
+    "delete-estimates": "yo apollo-server-with-mongodb:delete-estimates",
+    "add-has-one": "yo apollo-server-with-mongodb:add-has-one",
+    "delete-has-one": "yo apollo-server-with-mongodb:delete-has-one",
+    "add-has-many": "yo apollo-server-with-mongodb:add-has-many",
+    "delete-has-many": "yo apollo-server-with-mongodb:delete-has-many"
+  },
+  "keywords": [],
+  "dependencies": {
+    "apollo-server": "^2.5.0",
+    "aws-sdk": "^2.683.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "fs-capacitor": "^6.1.0",
+    "graphql": "^14.3.1",
+    "handlebars": "^4.7.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.11",
+    "mongoose-auto-increment": "^5.0.1",
+    "nodemailer": "^6.4.2",
+    "petrovich": "^0.2.1",
+    "urldecode": "^1.0.1",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "nodemon": "^2.0.1"
+  }
+}

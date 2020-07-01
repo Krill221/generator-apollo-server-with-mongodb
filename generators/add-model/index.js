@@ -58,6 +58,8 @@ module.exports = class extends Generator {
       `type Query {\n\t\t${this.answers.small_models}: [${this.answers.model}]\n\t\t${this.answers.small_model}(id: ID): ${this.answers.model}`);
     typeDefs = typeDefs.toString().replace(regExDQ,
         `type Query {\n\t\t${this.answers.small_models}_where(ids: [ID]): [${this.answers.model}]`);
+    typeDefs = typeDefs.toString().replace(regExDQ,
+        `type Query {\n\t\t${this.answers.small_models}_where_location(location_name: String, lat: String, lng: String, distance: String): [${this.answers.model}]`);
       
     typeDefs = typeDefs.toString().replace(regExDM,
       `type Mutation {\n\t\tdelete${this.answers.model}(id: ID!): String!\n\t\tupdate${this.answers.model}(\n\t\t\t${this.answers.fields.map(i => `${i[0]}: ${i[1]},`).join('\n\t\t\t')}\n\t\t\tid: ID\n\t\t): String!\n`);

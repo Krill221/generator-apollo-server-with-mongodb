@@ -59,3 +59,11 @@ yarn add-estimates Post like:Float stars:Float
 ```
 yarn delete-estimates Post like:Float stars:Float
 ```
+#### To add location fields to model type in console:
+```
+yarn add-locations Post location1:Location location2:Location
+```
+#### To delete location fields to model type in console:
+```
+yarn delete-locations Post location1:Location location2:Location
+```

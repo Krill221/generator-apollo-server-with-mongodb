@@ -13,6 +13,8 @@
     "add-fields": "yo apollo-server-with-mongodb:add-fields",
     "add-estimates": "yo apollo-server-with-mongodb:add-estimates",
     "delete-fields": "yo apollo-server-with-mongodb:delete-fields",
+    "add-locations": "yo apollo-server-with-mongodb:add-locations",
+    "delete-locations": "yo apollo-server-with-mongodb:delete-locations",
     "delete-estimates": "yo apollo-server-with-mongodb:delete-estimates",
     "add-has-one": "yo apollo-server-with-mongodb:add-has-one",
     "delete-has-one": "yo apollo-server-with-mongodb:delete-has-one",

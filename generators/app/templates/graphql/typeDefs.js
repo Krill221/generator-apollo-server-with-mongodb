@@ -22,6 +22,10 @@ module.exports = gql`
 		mimetype: String!
 		encoding: String!
 	}
+	type Location {
+		type: String,
+		coordinates: [Float]
+	}
 	type Estimate {
 		owner: ID,
 		value: Float

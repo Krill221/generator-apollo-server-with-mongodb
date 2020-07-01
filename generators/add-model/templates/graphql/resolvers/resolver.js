@@ -21,7 +21,25 @@ module.exports = {
             } catch (err) {
                 throw new Error(err);
             }
-        },
+		},
+		async <%=small_models%>_where_location(_, { location_name, lat, lng, distance }) {
+			try {
+			  const <%=small_models%> = await <%=model%>.find({
+				`${location_name}`: { ///????
+				  $near: {
+					$maxDistance: parseFloat(distance),
+					$geometry: {
+					  type: "Point",
+					  coordinates: [parseFloat(lat), parseFloat(lng)]
+					}
+				  }
+				}
+			  }).sort({ createdAt: -1 });//g-key populate
+			  return <%=small_models%>;
+			} catch (err) {
+			  throw new Error(err);
+			}
+		},
         async <%=small_model%>(_, { id }) {
             try {
                 const <%=small_model%> = await <%=model%>.findById(id);//g-key populate

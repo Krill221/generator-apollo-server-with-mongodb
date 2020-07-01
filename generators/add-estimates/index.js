@@ -51,6 +51,7 @@ module.exports = class extends Generator {
     this.answers.fields.forEach(f => {
       text3 = text3.toString().replace(regEx4, `
                 if (${f[0]} !== undefined){
+                  const u = checkAuth(context);
                   if(item.${f[0]}.filter(i => i.owner == u.id).length !== 0 ){
                     if(item.${f[0]}.find(i => i.owner == u.id).value == ${f[0]})
                       item.${f[0]} = item.${f[0]}.filter((i) => i.owner != u.id);

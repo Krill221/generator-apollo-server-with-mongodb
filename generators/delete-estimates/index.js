@@ -52,6 +52,7 @@ module.exports = class extends Generator {
 
       var regEx4 = new RegExp(`
                 if \\(${f[0]} !== undefined\\)\\{
+                  const u = checkAuth(context);
                   if\\(item.${f[0]}.filter\\(i => i.owner == u.id\\).length !== 0 \\)\\{
                     if\\(item.${f[0]}.find\\(i => i.owner == u.id\\).value == ${f[0]}\\)
                       item.${f[0]} = item.${f[0]}.filter\\(\\(i\\) => i.owner != u.id\\);
@@ -74,46 +75,6 @@ module.exports = class extends Generator {
     this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), text);
     this.fs.write(this.destinationPath(`graphql/typeDefs.js`), text2);
     this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
-
-
-    /*
-    var text = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
-    var regEx1 = new RegExp('new Schema\\({', 'g');
-    text = text.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( `${f[0]}: [{\n\t\towner: {type: Schema.Types.ObjectId, ref: 'Object'},\n\t\tvalue: Number,\n\t}]`) ).join(',\n\t')},`);
-    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), text);
-
-
-    var text2 = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
-    var regEx2 = new RegExp(`type ${this.answers.model} {`, 'g');
-    var regEx3 = new RegExp(`update${this.answers.model}\\(`, 'g');
-    text2 = text2.toString().replace(regEx2, `type ${this.answers.model} {\n\t\t${this.answers.fields.map(f => `${f[0]}: [Estimate]`).join('\n\t\t')}`);
-    text2 = text2.toString().replace(regEx3, `update${this.answers.model}(\n\t\t\t${this.answers.fields.map(f => `${f[0]}: Float`).join(',\n\t\t\t')}`);
-    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), text2);
-
-    var text3 = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    var regEx6 = new RegExp(`async update${this.answers.model}\\(_, { `, 'g');
-    text3 = text3.toString().replace(regEx6, `async update${this.answers.model}(_, { ${this.answers.fields.map(f => f[0]).join(', ')}, `);
-    var regEx4 = new RegExp(`await item.save\\(\\);`, 'g');
-    this.answers.fields.forEach(f => {
-      text3 = text3.toString().replace(regEx4, `
-                if (${f[0]} !== undefined){
-                  if(item.${f[0]}.filter(i => i.owner == u.id).length !== 0 ){
-                    if(item.${f[0]}.find(i => i.owner == u.id).value == ${f[0]})
-                      item.${f[0]} = item.${f[0]}.filter((i) => i.owner != u.id);
-                    else{
-                      let index = item.${f[0]}.findIndex( i => i.owner == u.id);
-                      item.${f[0]}[index].value = ${f[0]};
-                    }
-                  } else {
-                    const newEst = new Estimate({owner: u.id, value: ${f[0]}});
-                    item.${f[0]} = item.${f[0]}.concat(newEst);
-                  }
-                }
-                await item.save();`);
-    });
-
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
-    */
 
   }
 

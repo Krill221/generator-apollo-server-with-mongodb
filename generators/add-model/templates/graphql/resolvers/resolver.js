@@ -39,8 +39,6 @@ module.exports = {
 		async update<%=model%>(_, { id, <%= fields.map(f => f[0]).join(', ') %>, }, context) {
 			try {
 				let item;
-				const u = checkAuth(context);
-				const user = await User.findById(u.id);
 				if (!id || id === 'new') {
 					item = new <%=model%>({
 						<% fields.forEach(function(field){ %><%= field[0] %>,

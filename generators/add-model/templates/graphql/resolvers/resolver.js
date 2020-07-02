@@ -25,7 +25,7 @@ module.exports = {
 		async <%=small_models%>_where_location(_, { location_name, lat, lng, distance }) {
 			try {
 			  const <%=small_models%> = await <%=model%>.find({
-				`${location_name}`: { ///????
+				location_name: { ///???? TODO
 				  $near: {
 					$maxDistance: parseFloat(distance),
 					$geometry: {

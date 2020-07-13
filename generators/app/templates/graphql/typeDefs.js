@@ -33,6 +33,7 @@ module.exports = gql`
 	type Query {
 		users: [User]
 		user(id: ID): User
+		check_payment(payId: String): String
 	}
 	type Mutation {
 		register(registerInput: RegisterInput): User!
@@ -48,5 +49,8 @@ module.exports = gql`
 
 		uploadFile(file: Upload!): File
 		deleteFile(file: String!): String!
+
+		makePayment(payId: String, sum: String): String
+
     }
 `;

@@ -33,7 +33,7 @@ module.exports = class extends Generator {
     var regEx11 = new RegExp('module', 'g');
     models = models.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( `${f[0]}: {\n\t\ttype: { type: String },\n\t\tcoordinates: []\n\t}`) ).join(',\n\t')},`);
     this.answers.fields.forEach(f => {
-      models = models.toString().replace(regEx11, `PlaceSchema.index({ ${f[0]}: "2dsphere" });\nmodule`);
+      models = models.toString().replace(regEx11, `${this.answers.model}Schema.index({ ${f[0]}: "2dsphere" });\nmodule`);
     });
     this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), models);
 

@@ -14,6 +14,9 @@ npm i generator-web-app-with-graphql
 ## Get started:
 #### To generate server type in console:
 ```
+npm install -g npm
+npm install -g yo
+npm install generator-apollo-server-with-mongodb
 yo generator-apollo-server-with-mongodb
 ```
 #### than follow instructions

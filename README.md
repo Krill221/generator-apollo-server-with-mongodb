@@ -16,7 +16,7 @@ npm i generator-web-app-with-graphql
 ```
 npm install -g npm
 npm install -g yo
-npm install generator-apollo-server-with-mongodb
+npm install -g  generator-apollo-server-with-mongodb
 yo generator-apollo-server-with-mongodb
 ```
 #### than follow instructions

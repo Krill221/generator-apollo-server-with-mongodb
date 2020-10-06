@@ -17,7 +17,7 @@ npm i generator-web-app-with-graphql
 npm install -g npm
 npm install -g yo
 npm install -g  generator-apollo-server-with-mongodb
-yo generator-apollo-server-with-mongodb
+yo apollo-server-with-mongodb
 ```
 #### than follow instructions
 #### To start local server simply type:

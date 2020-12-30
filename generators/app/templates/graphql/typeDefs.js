@@ -2,10 +2,9 @@ const { gql } = require('apollo-server');
 
 module.exports = gql`
 	type User {
-		email: String!
-		token: String!
-		password: String!
-		username: String!
+		email: String
+		token: String
+		username: String
 
 		id: ID
 		createdAt: String
@@ -32,7 +31,6 @@ module.exports = gql`
 	}
 	type Query {
 		users: [User]
-		user(id: ID): User
 		check_payment(payId: String): String
 	}
 	type Mutation {
@@ -42,10 +40,10 @@ module.exports = gql`
 		deleteUser(id: ID!): String!
 		updateUser(
 			id: ID,
-			username: String!,
-			email: String!,
-			password: String!
-		): String!
+			username: String,
+			email: String,
+			password: String
+		): User!
 
 		uploadFile(file: Upload!): File
 		deleteFile(file: String!): String!

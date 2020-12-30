@@ -29,19 +29,6 @@ module.exports = {
                 throw new Error(err);
             }
         },
-        async user(_, { id }) {
-            try {
-                const user = await User.findById(id);//g-key populate
-                if (user) {
-                    user.password = ''
-                    return user;
-                } else {
-                    throw new Error('User not found');
-                }
-            } catch (err) {
-                throw new Error(err);
-            }
-        }
 	},
 	Mutation: {
 		async updateUser(_, {
@@ -51,7 +38,7 @@ module.exports = {
 			password,
 		}, context) {
 			try {
-                if (password != '') password = await bcrypt.hash(password, 12);
+                if (password !== '' && password !== undefined) password = await bcrypt.hash(password, 12);
                 let item;
 				if (!id || id === 'new') {
 					item = new User({
@@ -70,7 +57,7 @@ module.exports = {
 					item.updatedAt = new Date().toISOString();
                 }
                 await item.save();
-				return item.id;
+				return item;
 			} catch (err) {
 				throw new Error(err);
 			}

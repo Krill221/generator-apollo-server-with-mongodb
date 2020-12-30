@@ -1,7 +1,7 @@
 {
-  "name": "<%= name %>",
+  "name": "test-server",
   "version": "1.0.0",
-  "author": "<%= projectAuthor %>",
+  "author": "krill221",
   "description": "",
   "license": "MIT",
   "main": "index.js",
@@ -23,26 +23,28 @@
   },
   "keywords": [],
   "dependencies": {
-    "apollo-server": "^2.5.0",
+    "apollo-server": "^2.19.1",
     "aws-sdk": "^2.683.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "fs-capacitor": "^6.1.0",
-    "graphql": "^14.3.1",
+    "graphql": "^15.4.0",
     "handlebars": "^4.7.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.5.11",
+    "mongoose": "^5.11.8",
     "mongoose-auto-increment": "^5.0.1",
     "nodemailer": "^6.4.2",
     "petrovich": "^0.2.1",
     "urldecode": "^1.0.1",
-    "uuid": "^3.3.3"
+    "uuid": "^8.3.2",
+    "yandex-checkout": "^1.0.13"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
-    "@babel/node": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "nodemon": "^2.0.1"
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "fsevents": "^2.2.1",
+    "nodemon": "^2.0.6"
   }
 }

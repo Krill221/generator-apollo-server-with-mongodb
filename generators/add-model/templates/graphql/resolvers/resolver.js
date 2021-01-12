@@ -40,18 +40,6 @@ module.exports = {
 			  throw new Error(err);
 			}
 		},
-        async <%=small_model%>(_, { id }) {
-            try {
-                const <%=small_model%> = await <%=model%>.findById(id);//g-key populate
-                if (<%=small_model%>) {
-                    return <%=small_model%>;
-                } else {
-                    throw new Error('<%=model%> not found');
-                }
-            } catch (err) {
-                throw new Error(err);
-            }
-        }
 	},
 	Mutation: {
 		async update<%=model%>(_, { id, <%= fields.map(f => f[0]).join(', ') %>, }, context) {
@@ -72,7 +60,7 @@ module.exports = {
 					item.updatedAt =  new Date().toISOString();
 				}
 				await item.save();
-				return item.id;
+				return item;
 			} catch (err) {
 				throw new Error(err);
 			}

@@ -5,7 +5,7 @@ const yandexKassa = require('yandex-checkout');
 
 module.exports = {
     Query: {
-        async check_payment(_, { payId }, context) {
+        async checkPayment(_, { payId }, context) {
             try {
                 let payment = { error: { code: "empty" } };
                 if (payId === undefined || payId === '') return JSON.stringify(payment);

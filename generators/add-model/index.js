@@ -57,12 +57,12 @@ module.exports = class extends Generator {
       `module.exports = gql\`\n\ttype ${this.answers.model} {\n\t\t${this.answers.fields.map(i => `${i[0]}: ${i[1]}`).join('\n\t\t')}\n\n\t\tid: ID!\n\t\tcreatedAt: String\n\t\tupdatedAt: String\n\t}`);
 
     typeDefs = typeDefs.toString().replace(regExDQ,
-      `type Query {\n\t\t${this.answers.small_models}: [${this.answers.model}]`);
+      `type Query {\n\t\t${this.answers.model}s: [${this.answers.model}]`);
 
     typeDefs = typeDefs.toString().replace(regExDQ,
-        `type Query {\n\t\t${this.answers.small_models}_where(ids: [ID]): [${this.answers.model}]`);
+        `type Query {\n\t\t${this.answers.model}sWhere(ids: [ID]): [${this.answers.model}]`);
     typeDefs = typeDefs.toString().replace(regExDQ,
-        `type Query {\n\t\t${this.answers.small_models}_where_location(location_name: String, lat: String, lng: String, distance: String): [${this.answers.model}]`);
+        `type Query {\n\t\t${this.answers.model}sWhereLocation(location_name: String, lat: String, lng: String, distance: String): [${this.answers.model}]`);
       
     typeDefs = typeDefs.toString().replace(regExDM,
       `type Mutation {\n\t\tdelete${this.answers.model}(id: ID!): String!\n\t\tupdate${this.answers.model}(\n\t\t\t${this.answers.fields.map(i => `${i[0]}: ${i[1]},`).join('\n\t\t\t')}\n\t\t\tid: ID\n\t\t): ${this.answers.model}!\n`);

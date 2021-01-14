@@ -30,8 +30,8 @@ module.exports = gql`
 		value: Float
 	}
 	type Query {
-		users: [User]
-		check_payment(payId: String): String
+		Users: [User]
+		checkPayment(payId: String): String
 	}
 	type Mutation {
 		register(registerInput: RegisterInput): User!

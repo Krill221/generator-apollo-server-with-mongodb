@@ -4,7 +4,7 @@ const checkAuth = require('../../util/check-auth');
 
 module.exports = {
     Query: {
-        async <%=small_models%>() {
+        async <%=model%>s() {
             try {
 				const <%=small_models%> = await <%=model%>.find().sort({ createdAt: -1 });//g-key populate
 				return <%=small_models%>;
@@ -12,7 +12,7 @@ module.exports = {
                 throw new Error(err);
             }
 		},
-		async <%=small_models%>_where(_, { ids }) {
+		async <%=model%>sWhere(_, { ids }) {
             try {
 				let _ids = [];
 				if (ids !== undefined) _ids = ids;
@@ -22,7 +22,7 @@ module.exports = {
                 throw new Error(err);
             }
 		},
-		async <%=small_models%>_where_location(_, { location_name, lat, lng, distance }) {
+		async <%=model%>sWhereLocation(_, { location_name, lat, lng, distance }) {
 			try {
 			  const <%=small_models%> = await <%=model%>.find({
 				location_name: { ///???? TODO
@@ -42,7 +42,7 @@ module.exports = {
 		},
 	},
 	Mutation: {
-		async update<%=model%>(_, { id, <%= fields.map(f => f[0]).join(', ') %>, }, context) {
+		async update<%=model%>(_, { input: { id, <%= fields.map(f => f[0]).join(', ') %> } }, context) {
 			try {
 				let item;
 				if (!id || id === 'new') {

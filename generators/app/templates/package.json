@@ -8,7 +8,7 @@
   "scripts": {
     "serve": "node index.js",
     "start": "node index.js",
-    "s": "node index",
+    "s": "nodemon index",
     "add-model": "yo apollo-server-with-mongodb:add-model",
     "add-fields": "yo apollo-server-with-mongodb:add-fields",
     "add-estimates": "yo apollo-server-with-mongodb:add-estimates",
@@ -45,6 +45,6 @@
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "fsevents": "^2.2.1",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.7"
   }
 }

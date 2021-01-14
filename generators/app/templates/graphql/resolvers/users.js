@@ -21,7 +21,7 @@ function generateToken(user) {
 
 module.exports = {
     Query: {
-        async users() {
+        async Users() {
             try {
                 const users = await User.find().sort({ createdAt: -1 });//g-key populate
                 return users;

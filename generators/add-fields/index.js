@@ -28,28 +28,29 @@ module.exports = class extends Generator {
 
   writing() {
     
-    var text = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
+    // models
+    var ModelsFile = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
     var regEx1 = new RegExp('new Schema\\({', 'g');
-    text = text.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( (f[1] === 'ID') ? `${f[0]}: {type: Schema.Types.ObjectId, ref: 'Object'}` : `${f[0]}: ${f[1]}`) ).join(',\n\t')},`);
-    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), text);
+    ModelsFile = ModelsFile.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( (f[1] === 'ID') ? `${f[0]}: {type: Schema.Types.ObjectId, ref: 'Object'}` : `${f[0]}: ${f[1]}`) ).join(',\n\t')},`);
+    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), ModelsFile);
 
+    // typeDefs
+    var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
+    var typeText = new RegExp(`type ${this.answers.model} {`, 'g');
+    var updateText = new RegExp(`update${this.answers.model}\\(`, 'g');
+    typeDefsFile = typeDefsFile.toString().replace(typeText, `type ${this.answers.model} {\n\t\t${this.answers.fields.map(f => `${f[0]}: ${f[1]}`).join('\n\t\t')}`);
+    typeDefsFile = typeDefsFile.toString().replace(updateText, `update${this.answers.model}(\n\t\t\t${this.answers.fields.map(f => `${f[0]}: ${f[1]}`).join(',\n\t\t\t')},`);
+    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), typeDefsFile);
 
-    var text2 = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
-    var regEx2 = new RegExp(`type ${this.answers.model} {`, 'g');
-    var regEx3 = new RegExp(`update${this.answers.model}\\(`, 'g');
-    text2 = text2.toString().replace(regEx2, `type ${this.answers.model} {\n\t\t${this.answers.fields.map(f => `${f[0]}: ${f[1]}`).join('\n\t\t')}`);
-    text2 = text2.toString().replace(regEx3, `update${this.answers.model}(\n\t\t\t${this.answers.fields.map(f => `${f[0]}: ${f[1]}`).join(',\n\t\t\t')},`);
-    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), text2);
-
-    var text3 = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    var regEx4 = new RegExp(`new ${this.answers.model}\\({`, 'g');
-    var regEx5 = new RegExp(`item = await ${this.answers.model}.findById\\(id\\);`, 'g');
-    var regEx6 = new RegExp(`async update${this.answers.model}\\(_, { `, 'g');
-    text3 = text3.toString().replace(regEx4, `new ${this.answers.model}({\n\t\t\t\t\t\t${this.answers.fields.map(f => `${f[0]}`).join(',\n\t\t\t\t\t\t')},`);
-    text3 = text3.toString().replace(regEx5, `item = await ${this.answers.model}.findById(id);\n\t\t\t\t\t${this.answers.fields.map(f => `if (${f[0]} !== undefined) item.${f[0]} = ${f[0]};`).join('\n\t\t\t\t\t')}`);
-    text3 = text3.toString().replace(regEx6, `async update${this.answers.model}(_, { ${this.answers.fields.map(f => f[0]).join(', ')}, `);
-
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
+    // resolvers
+    var ResolversFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
+    var newText = new RegExp(`new ${this.answers.model}\\({`, 'g');
+    var awaitText = new RegExp(`item = await ${this.answers.model}.findById\\(id\\);`, 'g');
+    var asyncUpdateText = new RegExp(`async update${this.answers.model}\\(_, { `, 'g');
+    ResolversFile = ResolversFile.toString().replace(newText, `new ${this.answers.model}({\n\t\t\t\t\t\t${this.answers.fields.map(f => `${f[0]}`).join(',\n\t\t\t\t\t\t')},`);
+    ResolversFile = ResolversFile.toString().replace(awaitText, `item = await ${this.answers.model}.findById(id);\n\t\t\t\t\t${this.answers.fields.map(f => `if (${f[0]} !== undefined) item.${f[0]} = ${f[0]};`).join('\n\t\t\t\t\t')}`);
+    ResolversFile = ResolversFile.toString().replace(asyncUpdateText, `async update${this.answers.model}(_, { ${this.answers.fields.map(f => f[0]).join(', ')}, `);
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), ResolversFile);
 
 
   }

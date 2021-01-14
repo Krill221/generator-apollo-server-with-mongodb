@@ -10,11 +10,11 @@ const pubsub = new PubSub();
 
 const server = new ApolloServer({
 	cors: {
-		  origin: "*",
-		  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-		  preflightContinue: false,
-		  optionsSuccessStatus: 204,
-		  credentials: true
+		origin: "*",
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		preflightContinue: false,
+		optionsSuccessStatus: 204,
+		credentials: true
 	},
 	typeDefs,
 	resolvers,
@@ -29,7 +29,7 @@ mongoose
 	})
 	.then((res) => {
 		console.log(`Server running`);
-		console.log(`Listening on ${ process.env.PORT }`);
+		console.log(`Listening on ${process.env.PORT}`);
 	})
 	.catch(err => {
 		console.error(err)

@@ -10,6 +10,7 @@
     "start": "node index.js",
     "s": "nodemon index",
     "add-model": "yo apollo-server-with-mongodb:add-model",
+    "delete-model": "yo apollo-server-with-mongodb:delete-model",
     "add-fields": "yo apollo-server-with-mongodb:add-fields",
     "add-estimates": "yo apollo-server-with-mongodb:add-estimates",
     "delete-fields": "yo apollo-server-with-mongodb:delete-fields",

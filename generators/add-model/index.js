@@ -26,8 +26,8 @@ module.exports = class extends Generator {
 
   writing() {
     this.fs.copyTpl(
-      this.templatePath('models/model.js'),
-      this.destinationPath(`models/${this.answers.model}.js`),
+      this.templatePath('graphql/models/model.js'),
+      this.destinationPath(`graphql/models/${this.answers.model}.js`),
       this.answers,
     );
     this.fs.copyTpl(
@@ -35,39 +35,42 @@ module.exports = class extends Generator {
       this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`),
       this.answers,
     );
-
-    
-    var index = this.fs.read(this.destinationPath('graphql/resolvers/index.js'));
-    var regExReq = new RegExp('//top for generation', 'g');
-    var regExQ = new RegExp('Query: {', 'g');
-    var regExM = new RegExp('Mutation: {', 'g');
-    index = index.toString().replace(regExReq,
-      `//top for generation\nconst ${this.answers.small_models}Resolvers = require('./${this.answers.small_models}');`);
-    index = index.toString().replace(regExQ, `Query: {\n\t\t...${this.answers.small_models}Resolvers.Query,`);
-    index = index.toString().replace(regExM, `Mutation: {\n\t\t...${this.answers.small_models}Resolvers.Mutation,`);
-    this.fs.write(this.destinationPath('graphql/resolvers/index.js'), index);
+    this.fs.copyTpl(
+      this.templatePath('graphql/typeDefs/types.js'),
+      this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`),
+      this.answers,
+    );
 
 
-    var typeDefs = this.fs.read(this.destinationPath('graphql/typeDefs.js'));
-    var regExType = new RegExp('module.exports = gql`', 'g');
-    var regExDQ = new RegExp('type Query {', 'g');
-    var regExDM = new RegExp('type Mutation {', 'g');
+    var resolversFile = this.fs.read(this.destinationPath('graphql/resolvers/index.js'));
+    var resolverTop = '//top for generation';
+    var resolverTopNew = `//top for generation\nconst ${this.answers.small_models} = require('./${this.answers.small_models}');`
+    var resolverQ = 'Query: {';
+    var resolverQNew = `Query: {\n\t\t...${this.answers.small_models}.Query,`;
+    var resolverM = 'Mutation: {';
+    var resolverMNew = `Mutation: {\n\t\t...${this.answers.small_models}.Mutation,`;
+    resolversFile = resolversFile.toString().replace( new RegExp(resolverTop, 'g'), resolverTopNew );
+    resolversFile = resolversFile.toString().replace( new RegExp(resolverQ, 'g'), resolverQNew);
+    resolversFile = resolversFile.toString().replace( new RegExp(resolverM, 'g'), resolverMNew);
+    this.fs.write(this.destinationPath('graphql/resolvers/index.js'), resolversFile);
 
-    var typeDefs = typeDefs.toString().replace(regExType,
-      `module.exports = gql\`\n\ttype ${this.answers.model} {\n\t\t${this.answers.fields.map(i => `${i[0]}: ${i[1]}`).join('\n\t\t')}\n\n\t\tid: ID!\n\t\tcreatedAt: String\n\t\tupdatedAt: String\n\t}`);
 
-    typeDefs = typeDefs.toString().replace(regExDQ,
-      `type Query {\n\t\t${this.answers.model}s: [${this.answers.model}]`);
-
-    typeDefs = typeDefs.toString().replace(regExDQ,
-        `type Query {\n\t\t${this.answers.model}sWhere(ids: [ID]): [${this.answers.model}]`);
-    typeDefs = typeDefs.toString().replace(regExDQ,
-        `type Query {\n\t\t${this.answers.model}sWhereLocation(location_name: String, lat: String, lng: String, distance: String): [${this.answers.model}]`);
-      
-    typeDefs = typeDefs.toString().replace(regExDM,
-      `type Mutation {\n\t\tdelete${this.answers.model}(id: ID!): String!\n\t\tupdate${this.answers.model}(\n\t\t\t${this.answers.fields.map(i => `${i[0]}: ${i[1]},`).join('\n\t\t\t')}\n\t\t\tid: ID\n\t\t): ${this.answers.model}!\n`);
-
-    this.fs.write(this.destinationPath('graphql/typeDefs.js'), typeDefs);
+    var typeFile = this.fs.read(this.destinationPath('graphql/typeDefs/index.js'));
+    var typeTop = '//top for generation';
+    var typeTopNew = `//top for generation\nconst ${this.answers.small_models} = require('./${this.answers.small_models}');`
+    var typeGql = 'helpers.Type}';
+    var typeGqlNew1 = `helpers.Type}\n\t\${${this.answers.small_models}.Type}`;
+    var typeGqlNew2 = `helpers.Type}\n\t\${${this.answers.small_models}.Input}`;
+    var typeQ = 'type Query {';
+    var typeQNew = `type Query {\n\t\t\${${this.answers.small_models}.Query}`;
+    var typeM = 'type Mutation {';
+    var typeMNew = `type Mutation {\n\t\t\${${this.answers.small_models}.Mutation}`;
+    typeFile = typeFile.toString().replace( new RegExp(typeTop, 'g'), typeTopNew );
+    typeFile = typeFile.toString().replace( new RegExp(typeGql, 'g'), typeGqlNew1);
+    typeFile = typeFile.toString().replace( new RegExp(typeGql, 'g'), typeGqlNew2);
+    typeFile = typeFile.toString().replace( new RegExp(typeQ, 'g'), typeQNew);
+    typeFile = typeFile.toString().replace( new RegExp(typeM, 'g'), typeMNew);
+    this.fs.write(this.destinationPath('graphql/typeDefs/index.js'), typeFile);
 
   }
 

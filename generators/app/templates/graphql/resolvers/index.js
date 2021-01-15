@@ -1,16 +1,16 @@
 //top for generation
-const usersResolvers = require('./users');
-const uploadResolvers = require('./uploadFile');
-const payResolvers = require('./paymentYandexKassa');
+const users = require('./users');
+const upload = require('./uploadFile');
+const pay = require('./paymentYandexKassa');
 
 module.exports = {
 	Query: {
-		...usersResolvers.Query,
-		...payResolvers.Query,
+		...users.Query,
+		...pay.Query,
 	},
 	Mutation: {
-		...usersResolvers.Mutation,
-		...uploadResolvers.Mutation,
-		...payResolvers.Mutation,
+		...users.Mutation,
+		...upload.Mutation,
+		...pay.Mutation,
 	}
 };

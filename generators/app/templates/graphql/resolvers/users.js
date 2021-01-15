@@ -5,7 +5,7 @@ const {
 	validateRegisterInput,
 	validateLoginInput
 } = require('../../util/validators');
-const User = require('../../models/User');
+const User = require('../models/User');
 
 function generateToken(user) {
 	return jwt.sign(

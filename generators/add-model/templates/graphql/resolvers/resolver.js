@@ -1,5 +1,5 @@
-const <%=model%> = require('../../models/<%=model%>');
-const User = require('../../models/User');
+const <%=model%> = require('../models/<%=model%>');
+const User = require('../models/User');
 const checkAuth = require('../../util/check-auth');
 
 module.exports = {

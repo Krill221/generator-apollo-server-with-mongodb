@@ -29,41 +29,24 @@ module.exports = class extends Generator {
     this.log("delete population", this.answers.population);
   }
 
-  async prompting() {
-  }
-
   writing() {
 
-    var text = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
-    var text2 = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
-    var text3 = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    
-    let regEx1 = new RegExp(`\t${this.answers.small_populations}: \\[\\{[\\S\\s]*?\\}\\],\n`, 'g');
-    text = text.toString().replace(regEx1, '');
-    
-    
-    let regEx2 = new RegExp(`type ${this.answers.model} \\{[\\S\\s]*?\\}`, 'g');
-    text2 = text2.toString().replace(regEx2, (substr) => {
-      let regEx = new RegExp(`\t\t${this.answers.small_populations}: \\[ID\\]\n`, 'g');
-      substr = substr.replace(regEx, '');
-      return substr;
-    });
+    var modelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
+    let modelsText = `\t${this.answers.small_populations}: \\[\\{[\\S\\s]*?\\}\\],\n`;
+    modelsFile = modelsFile.toString().replace(new RegExp( modelsText, 'g'), '');
+    this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), modelsFile);
 
-    let regEx3 = new RegExp(`update${this.answers.model}\\([\\S\\s]*?\\)`, 'g');
-    text2 = text2.toString().replace(regEx3, (substr) => {
-      let regEx = new RegExp(`\t\t\t${this.answers.small_populations}: \\[ID\\],\n`, 'g');
-      substr = substr.replace(regEx, '');
-      return substr;
-    });
+    var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
+    let fieldText = `${this.answers.small_populations}: \\[ID\\]\n`;
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
+    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefsFile);
 
+    var resolversFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
     let regEx4 = new RegExp(`\t\t\t\tif \\( ${this.answers.small_populations} !== undefined \\) item.${this.answers.small_populations} = ${this.answers.small_populations};\n`, 'g');
     let regEx6 = new RegExp(`${this.answers.small_populations}, `, 'g');
-    text3 = text3.toString().replace(regEx4, '');
-    text3 = text3.toString().replace(regEx6, '');    
-
-    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), text);
-    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), text2);
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
+    resolversFile = resolversFile.toString().replace(regEx4, '');
+    resolversFile = resolversFile.toString().replace(regEx6, '');    
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolversFile);
     
   }
 

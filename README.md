@@ -30,6 +30,10 @@ yarn s
 ```
 yarn add-model Post name:String desc:String
 ```
+#### To delete model type in console:
+```
+yarn delete-model Post
+```
 #### To add new fields to model type in console:
 ```
 yarn add-fields Post body:String img:String

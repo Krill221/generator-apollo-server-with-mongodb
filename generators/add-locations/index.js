@@ -23,41 +23,33 @@ module.exports = class extends Generator {
     this.log("add new fields", this.answers.fields);
   }
 
-  async prompting() {
-  }
-
   writing() {
     
-    var models = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
+    var models = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
     var regEx1 = new RegExp('new Schema\\({', 'g');
     var regEx11 = new RegExp('module', 'g');
     models = models.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( `${f[0]}: {\n\t\ttype: { type: String },\n\t\tcoordinates: []\n\t}`) ).join(',\n\t')},`);
     this.answers.fields.forEach(f => {
       models = models.toString().replace(regEx11, `${this.answers.model}Schema.index({ ${f[0]}: "2dsphere" });\nmodule`);
     });
-    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), models);
+    this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), models);
 
-    var typeDefs = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
-    var regEx2 = new RegExp(`type ${this.answers.model} {`, 'g');
-    var regEx3 = new RegExp(`update${this.answers.model}\\(`, 'g');
-    typeDefs = typeDefs.toString().replace(regEx2, `type ${this.answers.model} {\n\t\t${this.answers.fields.map(f => `${f[0]}: Location`).join('\n\t\t')}`);
-    typeDefs = typeDefs.toString().replace(regEx3, `update${this.answers.model}(\n\t\t\t${this.answers.fields.map(f => `${f[0]}_lat: String,\n\t\t\t${f[0]}_lng: String`).join(',\n\t\t\t')},`);
-    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), typeDefs);
+    var typeDefs = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
+    var regEx2 = `type ${this.answers.model} {`;
+    var regEx3 = `input ${this.answers.model}Input {`;
+    typeDefs = typeDefs.toString().replace(new RegExp(regEx2, 'g'), `type ${this.answers.model} {\n${this.answers.fields.map(f => `${f[0]}: Loc`).join('\n')}`);
+    typeDefs = typeDefs.toString().replace(new RegExp(regEx3, 'g'), `input ${this.answers.model}Input {\n${this.answers.fields.map(f => `${f[0]}: Location`).join('\n')}`);
+    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefs);
 
-    var resolvers = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    var regEx6 = new RegExp(`async update${this.answers.model}\\(_, { `, 'g');
-    resolvers = resolvers.toString().replace(regEx6, `async update${this.answers.model}(_, { ${this.answers.fields.map(f => `${f[0]}_lat, ${f[0]}_lng`).join(', ')}, `);
-
+    var resolversFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
+    var regEx6 = new RegExp(`async update${this.answers.model}\\(_, { input: { `, 'g');
+    resolversFile = resolversFile.toString().replace(regEx6, `async update${this.answers.model}(_, { input: { ${this.answers.fields.map(f => f[0] ).join(', ')}, `);
     var regEx4 = new RegExp(`await item.save\\(\\);`, 'g');
     this.answers.fields.forEach(f => {
-      resolvers = resolvers.toString().replace(regEx4, `
-                if (${f[0]}_lat !== undefined && ${f[0]}_lng !== undefined) {
-                  item.${f[0]} = { type: "Point", coordinates: [parseFloat(${f[0]}_lat), parseFloat(${f[0]}_lng)] }
-                }
+      resolversFile = resolversFile.toString().replace(regEx4, `if (${f[0]}.coordinates[0] !== undefined && ${f[0]}.coordinates[1] !== undefined) {\n\t\t\t\t\titem.${f[0]} = { type: "Point", coordinates: [parseFloat(${f[0]}.coordinates[0]), parseFloat(${f[0]}.coordinates[1])] }\n\t\t\t\t}
                 await item.save();`);
     });
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolvers);
-
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolversFile);
 
   }
 

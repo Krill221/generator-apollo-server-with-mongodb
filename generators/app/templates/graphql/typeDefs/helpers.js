@@ -5,7 +5,11 @@ module.exports = {
             mimetype: String!
             encoding: String!
         }
-        type Location {
+        type Loc {
+            type: String,
+            coordinates: [Float]
+        }
+        input Location {
             type: String,
             coordinates: [Float]
         }

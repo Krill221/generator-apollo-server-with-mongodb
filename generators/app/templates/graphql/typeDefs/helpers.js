@@ -13,7 +13,11 @@ module.exports = {
             type: String,
             coordinates: [Float]
         }
-        type Estimate {
+        type Esti {
+            owner: ID,
+            value: Float
+        }
+        input Estimate {
             owner: ID,
             value: Float
         }

@@ -6,6 +6,7 @@ const {
 	validateLoginInput
 } = require('../../util/validators');
 const User = require('../models/User');
+const Helper = require('../../util/helpers.js');
 
 function generateToken(user) {
 	return jwt.sign(

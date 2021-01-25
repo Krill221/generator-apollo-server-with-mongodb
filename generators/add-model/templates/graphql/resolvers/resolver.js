@@ -1,6 +1,7 @@
 const <%=model%> = require('../models/<%=model%>');
 const User = require('../models/User');
 const checkAuth = require('../../util/check-auth');
+const Helper = require('../../util/helpers.js');
 
 module.exports = {
     Query: {

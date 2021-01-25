@@ -46,7 +46,7 @@ module.exports = class extends Generator {
     resolversFile = resolversFile.toString().replace(regEx6, `async update${this.answers.model}(_, { input: { ${this.answers.fields.map(f => f[0] ).join(', ')}, `);
     var regEx4 = new RegExp(`await item.save\\(\\);`, 'g');
     this.answers.fields.forEach(f => {
-      resolversFile = resolversFile.toString().replace(regEx4, `if (${f[0]}.coordinates[0] !== undefined && ${f[0]}.coordinates[1] !== undefined) {\n\t\t\t\t\titem.${f[0]} = { type: "Point", coordinates: [parseFloat(${f[0]}.coordinates[0]), parseFloat(${f[0]}.coordinates[1])] }\n\t\t\t\t}
+      resolversFile = resolversFile.toString().replace(regEx4, `Helper.location(item, '${f[0]}', ${f[0]}, context);
                 await item.save();`);
     });
     this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolversFile);

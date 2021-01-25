@@ -28,14 +28,14 @@ module.exports = class extends Generator {
     var models = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
     var regEx1 = new RegExp('new Schema\\({', 'g');
     var regEx11 = new RegExp('module', 'g');
-    models = models.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( `${f[0]}: {\n\t\ttype: { type: String },\n\t\tcoordinates: []\n\t}`) ).join(',\n\t')},`);
+    models = models.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( `${f[0]}: [{\n\t\towner: {type: Schema.Types.ObjectId, ref: 'Object'},\n\t\tvalue: Number\n\t}]`) ).join(',\n\t')},`);
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), models);
 
     var typeDefs = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
     var regEx2 = `type ${this.answers.model} {`;
     var regEx3 = `input ${this.answers.model}Input {`;
-    typeDefs = typeDefs.toString().replace(new RegExp(regEx2, 'g'), `type ${this.answers.model} {\n${this.answers.fields.map(f => `${f[0]}: Loc`).join('\n')}`);
-    typeDefs = typeDefs.toString().replace(new RegExp(regEx3, 'g'), `input ${this.answers.model}Input {\n${this.answers.fields.map(f => `${f[0]}: Location`).join('\n')}`);
+    typeDefs = typeDefs.toString().replace(new RegExp(regEx2, 'g'), `type ${this.answers.model} {\n${this.answers.fields.map(f => `${f[0]}: [Esti]`).join('\n')}`);
+    typeDefs = typeDefs.toString().replace(new RegExp(regEx3, 'g'), `input ${this.answers.model}Input {\n${this.answers.fields.map(f => `${f[0]}: [Estimate]`).join('\n')}`);
     this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefs);
 
     var resolversFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
@@ -43,7 +43,7 @@ module.exports = class extends Generator {
     resolversFile = resolversFile.toString().replace(regEx6, `async update${this.answers.model}(_, { input: { ${this.answers.fields.map(f => f[0] ).join(', ')}, `);
     var regEx4 = new RegExp(`await item.save\\(\\);`, 'g');
     this.answers.fields.forEach(f => {
-      resolversFile = resolversFile.toString().replace(regEx4, `if (${f[0]}.coordinates[0] !== undefined && ${f[0]}.coordinates[1] !== undefined) {\n\t\t\t\t\titem.${f[0]} = { type: "Point", coordinates: [parseFloat(${f[0]}.coordinates[0]), parseFloat(${f[0]}.coordinates[1])] }\n\t\t\t\t}
+      resolversFile = resolversFile.toString().replace(regEx4, `Helper.estimate(item, '${f[0]}', ${f[0]}, context);
                 await item.save();`);
     });
     this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolversFile);

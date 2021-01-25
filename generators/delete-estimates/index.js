@@ -28,93 +28,29 @@ module.exports = class extends Generator {
 
   writing() {
 
-    var text = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
-    var text2 = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
-    var text3 = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
+    var models = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
+    var typeDefs = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
+    var resolvers = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
 
     this.answers.fields.forEach(f => {
-      var regEx1 = new RegExp(`\t${f[0]}: \\[\\{\n\t\towner: \\{type: Schema.Types.ObjectId, ref: 'Object'\\},\n\t\tvalue: Number,\n\t\\}\\],\n`, 'g');
-      text = text.toString().replace(regEx1, '');
+      var regEx1 = `\t${f[0]}: \\[{\n\t\towner: \\{type: Schema.Types.ObjectId, ref: \'Object\'\\},\n\t\tvalue: Number\n\t\\}],\n`;
+      models = models.toString().replace(new RegExp(regEx1, 'g'), '');
 
-      let regEx2 = new RegExp(`type ${this.answers.model} \\{[\\S\\s]*?\\}`, 'g');
-      text2 = text2.toString().replace(regEx2, (substr) => {
-        var regEx2 = new RegExp(`\t\t${f[0]}: \\[Estimate\\]\n`, 'g');
-        substr = substr.toString().replace(regEx2, '');
-        return substr;
-      });
+      var regEx31 = `${f[0]}: \\[Esti\\]\n`;
+      var regEx32 = `${f[0]}: \\[Estimate\\]\n`;
+      typeDefs = typeDefs.toString().replace(new RegExp(regEx31, 'g'), '');
+      typeDefs = typeDefs.toString().replace(new RegExp(regEx32, 'g'), '');
 
-      let regEx3 = new RegExp(`update${this.answers.model}\\([\\S\\s]*?\\)`, 'g');
-      text2 = text2.toString().replace(regEx3, (substr) => {
-        var regEx3 = new RegExp(`\t\t\t${f[0]}: Float,\n`, 'g');
-        substr = substr.toString().replace(regEx3, '');
-        return substr;
-      });
-
-      var regEx4 = new RegExp(`
-                if \\(${f[0]} !== undefined\\)\\{
-                  const u = checkAuth\\(context\\);
-                  if\\(item.${f[0]}.filter\\(i => i.owner == u.id\\).length !== 0 \\)\\{
-                    if\\(item.${f[0]}.find\\(i => i.owner == u.id\\).value == ${f[0]}\\)
-                      item.${f[0]} = item.${f[0]}.filter\\(\\(i\\) => i.owner != u.id\\);
-                    else\\{
-                      let index = item.${f[0]}.findIndex\\( i => i.owner == u.id\\);
-                      item.${f[0]}\\[index\\].value = ${f[0]};
-                    \\}
-                  \\} else \\{
-                    const newEst = new Estimate\\(\\{owner: u.id, value: ${f[0]}\\}\\);
-                    item.${f[0]} = item.${f[0]}.concat\\(newEst\\);
-                  \\}
-                \\}
-                `);
-      text3 = text3.toString().replace(regEx4, '');
-
-      var regEx5 = new RegExp(`${f[0]}, `, 'g');
-      text3 = text3.toString().replace(regEx5, '');
+      var regEx41 = `                Helper.estimate\\(item, \'${f[0]}\', ${f[0]}, context\\);\n`;
+      let regEx42 = new RegExp(`${f[0]}, `, 'g');
+      resolvers = resolvers.toString().replace(new RegExp(regEx41, 'g'), '');
+      resolvers = resolvers.toString().replace(new RegExp(regEx42, 'g'), '');
 
     });
-    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), text);
-    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), text2);
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
+    this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), models);
+    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefs);
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolvers);
 
-
-    /*
-    var text = this.fs.read(this.destinationPath(`models/${this.answers.model}.js`));
-    var regEx1 = new RegExp('new Schema\\({', 'g');
-    text = text.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( `${f[0]}: [{\n\t\towner: {type: Schema.Types.ObjectId, ref: 'Object'},\n\t\tvalue: Number,\n\t}]`) ).join(',\n\t')},`);
-    this.fs.write(this.destinationPath(`models/${this.answers.model}.js`), text);
-
-
-    var text2 = this.fs.read(this.destinationPath(`graphql/typeDefs.js`));
-    var regEx2 = new RegExp(`type ${this.answers.model} {`, 'g');
-    var regEx3 = new RegExp(`update${this.answers.model}\\(`, 'g');
-    text2 = text2.toString().replace(regEx2, `type ${this.answers.model} {\n\t\t${this.answers.fields.map(f => `${f[0]}: [Estimate]`).join('\n\t\t')}`);
-    text2 = text2.toString().replace(regEx3, `update${this.answers.model}(\n\t\t\t${this.answers.fields.map(f => `${f[0]}: Float`).join(',\n\t\t\t')}`);
-    this.fs.write(this.destinationPath(`graphql/typeDefs.js`), text2);
-
-    var text3 = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    var regEx6 = new RegExp(`async update${this.answers.model}\\(_, { `, 'g');
-    text3 = text3.toString().replace(regEx6, `async update${this.answers.model}(_, { ${this.answers.fields.map(f => f[0]).join(', ')}, `);
-    var regEx4 = new RegExp(`await item.save\\(\\);`, 'g');
-    this.answers.fields.forEach(f => {
-      text3 = text3.toString().replace(regEx4, `
-                if (${f[0]} !== undefined){
-                  if(item.${f[0]}.filter(i => i.owner == u.id).length !== 0 ){
-                    if(item.${f[0]}.find(i => i.owner == u.id).value == ${f[0]})
-                      item.${f[0]} = item.${f[0]}.filter((i) => i.owner != u.id);
-                    else{
-                      let index = item.${f[0]}.findIndex( i => i.owner == u.id);
-                      item.${f[0]}[index].value = ${f[0]};
-                    }
-                  } else {
-                    const newEst = new Estimate({owner: u.id, value: ${f[0]}});
-                    item.${f[0]} = item.${f[0]}.concat(newEst);
-                  }
-                }
-                await item.save();`);
-    });
-
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
-    */
 
   }
 

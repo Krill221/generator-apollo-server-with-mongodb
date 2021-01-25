@@ -43,12 +43,10 @@ module.exports = class extends Generator {
       typeDefs = typeDefs.toString().replace(new RegExp(regEx31, 'g'), '');
       typeDefs = typeDefs.toString().replace(new RegExp(regEx32, 'g'), '');
 
-      var regEx41 = `if \\(${f[0]}.coordinates\\[0\\] !== undefined && ${f[0]}.coordinates\\[1\\] !== undefined\\) \\{\n`;
-      var regEx42 = `\t\t\t\titem.${f[0]} = \\{ type: "Point", coordinates: \\[parseFloat\\(${f[0]}.coordinates\\[0\\]\\), parseFloat\\(${f[0]}.coordinates\\[1\\]\\)\\] \\}\n\t\t\t\t\\}`;
-      var regEx51 = `${f[0]}, `;
+      var regEx41 = `                Helper.location\\(item, \'${f[0]}\', ${f[0]}, context\\);\n`;
+      let regEx42 = new RegExp(`${f[0]}, `, 'g');
       resolvers = resolvers.toString().replace(new RegExp(regEx41, 'g'), '');
       resolvers = resolvers.toString().replace(new RegExp(regEx42, 'g'), '');
-      resolvers = resolvers.toString().replace(new RegExp(regEx51, 'g'), '');
 
     });
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), models);

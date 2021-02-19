@@ -105,11 +105,11 @@ module.exports = class extends Generator {
         message: "smtp_pass:",
         default: ''
       },
-      {
+      /*{
         type: "confirm",
         name: "confirmed",
         message: "Would you like to create the new service?"
-      }
+      }*/
     ]);
 
     this.log("app name", this.answers.name);

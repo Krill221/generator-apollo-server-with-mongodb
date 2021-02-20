@@ -3,6 +3,9 @@ const User = require('../models/User');
 const checkAuth = require('../../util/check-auth');
 const Helper = require('../../util/helpers.js');
 
+//const timeout = ms => new Promise(res => setTimeout(res, ms))
+//await timeout( 2011)
+
 module.exports = {
     Query: {
         async <%=model%>s() {

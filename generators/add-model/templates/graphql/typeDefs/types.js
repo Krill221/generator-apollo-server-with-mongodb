@@ -1,5 +1,5 @@
 module.exports = {
-	Type: `
+Type: `
 type <%= model %> {
 <% fields.forEach(function(field){ %><%= field[0] %>: <%=field[1]%>
 <% }) %>
@@ -8,20 +8,18 @@ createdAt: String
 updatedAt: String
 }
 `,
-	Input: `
+Input: `
 input <%= model %>Input {
 <% fields.forEach(function(field){ %><%= field[0] %>: <%=field[1]%>
 <% }) %>
 id: ID
 }
 `,
-	Query: `
-<%= model %>sWhereLocation(location_name: String, lat: String, lng: String, distance: String): [<%= model %>]
-<%= model %>sWhere(ids: [ID]): [<%= model %>]
-<%= model %>s: [<%= model %>]
+Query: `
+<%= model %>Where(parentId: ID): [<%= model %>]
 `,
-	Mutation: `
-delete<%= model %>(id: ID!): String!
+Mutation: `
+delete<%= model %>(input: <%= model %>Input): <%= model %>!
 update<%= model %>(input: <%= model %>Input): <%= model %>!
 `
 }

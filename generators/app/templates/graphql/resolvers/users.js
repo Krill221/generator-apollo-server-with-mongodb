@@ -1,12 +1,15 @@
+const Helper = require('../../util/helpers.js');
+const MainModel = require('../models/User');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { UserInputError } = require('apollo-server');
-const {
-	validateRegisterInput,
-	validateLoginInput
-} = require('../../util/validators');
-const User = require('../models/User');
-const Helper = require('../../util/helpers.js');
+const { validateRegisterInput, validateLoginInput } = require('../../util/validators');
+
+const belongTo = [''];
+const fieldsArray = ['username', 'email', 'password'];
+const HasMany = [];
+const timeDaley = 0;
 
 function generateToken(user) {
 	return jwt.sign(
@@ -21,54 +24,51 @@ function generateToken(user) {
 }
 
 module.exports = {
-    Query: {
-        async Users() {
-            try {
-                const users = await User.find().sort({ createdAt: -1 });//g-key populate
-                return users;
-            } catch (err) {
-                throw new Error(err);
-            }
-        },
+	Query: {
+		async UserWhere(_, params, context) {
+			try {
+				return Helper.Find(MainModel, params, belongTo, timeDaley);
+			} catch (err) {
+				throw new Error(err);
+			}
+		},
 	},
 	Mutation: {
 		async updateUser(_, {
-			id,
-			username,
-			email,
-			password,
+			input: {
+				id,
+				username,
+				email,
+				password,
+			}
 		}, context) {
 			try {
-                if (password !== '' && password !== undefined) password = await bcrypt.hash(password, 12);
-                let item;
-				if (!id || id === 'new') {
-					item = new User({
-						email,
-						username,
-						password,
-						createdAt: new Date().toISOString(),
-						updatedAt: new Date().toISOString()
-					});
-					//g-key after new
+				if (password !== '' && password !== undefined) password = await bcrypt.hash(password, 12);
+				let item;
+				const now = new Date().toISOString();
+				if (!id || id.includes('new')) {
+					item = new MainModel({ createdAt: now });
 				} else {
-					item = await User.findById(id);
+					item = await MainModel.findById(id);
+				}
+				if (item) {
 					if (username !== undefined) item.username = username;
 					if (email !== undefined) item.email = email;
 					if (password != '') item.password = password;
-					item.updatedAt = new Date().toISOString();
-                }
-                await item.save();
-				return item;
+					item.updatedAt = now;
+					await item.save();
+					return item;
+				} else {
+					throw new Error('no item');
+				}
 			} catch (err) {
 				throw new Error(err);
 			}
 		},
 
-		async deleteUser(_, { id }, context) {
+		async deleteUser(_, { input: params }, context) {
 			try {
-				const del = await User.findById(id);
-				await del.delete();
-				return 'deleted successfully';
+				return Helper.Delete(MainModel, params, timeDaley);
 			} catch (err) {
 				throw new Error(err);
 			}
@@ -81,7 +81,7 @@ module.exports = {
 				throw new UserInputError('Errors', { errors });
 			}
 
-			const user = await User.findOne({ username });
+			const user = await MainModel.findOne({ username });
 
 			if (!user) {
 				errors.general = 'User not found';
@@ -119,7 +119,7 @@ module.exports = {
 				throw new UserInputError('Errors', { errors });
 			}
 			// TODO: Make sure user doesnt already exist
-			const user = await User.findOne({ username });
+			const user = await MainModel.findOne({ username });
 			if (user) {
 				throw new UserInputError('Username is taken', {
 					errors: {
@@ -130,7 +130,7 @@ module.exports = {
 			// hash password and create an auth token
 			password = await bcrypt.hash(password, 12);
 
-			const newUser = new User({
+			const newUser = new MainModel({
 				email,
 				username,
 				password,

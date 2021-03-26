@@ -30,7 +30,6 @@ module.exports = class extends Generator {
 
     var modelFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
     var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
-    var resFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
     this.answers.fields.forEach(f => {
       let regEx1 = new RegExp(`\t${f[0]}: ${f[1]},\n`, 'g');
       let regEx2 = new RegExp(`    ${f[0]}: ${f[1]},\n`, 'g');
@@ -43,25 +42,14 @@ module.exports = class extends Generator {
 
       let fieldText = `${f[0]}: ${f[1]}\n`;
       typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
-
-      /*let regEx2 = new RegExp(`type ${this.answers.model} \\{[\\S\\s]*?\\}`, 'g');
-      typeDefsFile = typeDefsFile.toString().replace(regEx2, (substr) => {
-        let regEx = new RegExp(`\t\t${f[0]}: ${f[1]}\n`, 'g');
-        substr = substr.replace(regEx, '');
-        return substr;
-      });
-      */
-
-      let regEx4 = new RegExp(`\t\t\t\t\tif \\(${f[0]} !== undefined\\) item.${f[0]} = ${f[0]};\n`, 'g');
-      let regEx5 = new RegExp(`\t\t\t\t\t\t${f[0]},\n`, 'g');
-      let regEx6 = new RegExp(`${f[0]}, `, 'g');
-      resFile = resFile.toString().replace(regEx4, '');
-      resFile = resFile.toString().replace(regEx5, '');
-      resFile = resFile.toString().replace(regEx6, '');
-
     });
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), modelFile);
     this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefsFile);
+
+    // resolvers
+    var resFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
+    var fieldsQuery = `${this.answers.fields.map(f => '\''+f[0]+'\'').join(', ')}, `;
+    resFile = resFile.toString().replace(new RegExp(fieldsQuery, 'g'), '');
     this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resFile);
 
   }

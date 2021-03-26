@@ -46,17 +46,10 @@ module.exports = class extends Generator {
 
     // resolvers
     var ResolversFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    var resNewText = `new ${this.answers.model}\\({`;
-    var resNewTextNew = `new ${this.answers.model}({\n\t\t\t\t\t\t${this.answers.fields.map(f => `${f[0]}`).join(',\n\t\t\t\t\t\t')},`;
-    var awaitText = `item = await ${this.answers.model}.findById\\(id\\);`;
-    var awaitTextNew = `item = await ${this.answers.model}.findById(id);\n\t\t\t\t\t${this.answers.fields.map(f => `if (${f[0]} !== undefined) item.${f[0]} = ${f[0]};`).join('\n\t\t\t\t\t')}`;
-    var asyncUpdateText = `async update${this.answers.model}\\(_, { input: { `;
-    var asyncUpdateTextNew = `async update${this.answers.model}(_, { input: { ${this.answers.fields.map(f => f[0]).join(', ')}, `;
-    ResolversFile = ResolversFile.toString().replace(new RegExp(resNewText, 'g'), resNewTextNew);
-    ResolversFile = ResolversFile.toString().replace(new RegExp(awaitText, 'g'), awaitTextNew);
-    ResolversFile = ResolversFile.toString().replace(new RegExp(asyncUpdateText, 'g'), asyncUpdateTextNew);
+    var fieldsQuery = `const fieldsArray = \\[`;
+    var fieldsQueryNew = `const fieldsArray = [${this.answers.fields.map(f => '\''+f[0]+'\'').join(', ')}, `;
+    ResolversFile = ResolversFile.toString().replace(new RegExp(fieldsQuery, 'g'), fieldsQueryNew);
     this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), ResolversFile);
-
 
   }
 

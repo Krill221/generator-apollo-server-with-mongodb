@@ -42,14 +42,6 @@ yarn add-fields Post body:String img:String
 ```
 yarn delete-fields Post body:String img:String
 ```
-#### To add new has-one relation field to model type in console:
-```
-yarn add-has-one Post Comment name:String desc:String
-```
-#### To delete has-one relation field from model type in console:
-```
-yarn delete-has-one Post Comment
-```
 #### To add new has-many relation field to model type in console:
 ```
 yarn add-has-many Post Comment

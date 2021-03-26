@@ -31,23 +31,32 @@ module.exports = class extends Generator {
 
   writing() {
 
-    var modelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
-    let modelsText = `\t${this.answers.small_populations}: \\[\\{[\\S\\s]*?\\}\\],\n`;
-    modelsFile = modelsFile.toString().replace(new RegExp( modelsText, 'g'), '');
-    this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), modelsFile);
-
-    var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
-    let fieldText = `${this.answers.small_populations}: \\[ID\\]\n`;
-    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
-    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefsFile);
-
-    var resolversFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    let regEx4 = new RegExp(`\t\t\t\tif \\( ${this.answers.small_populations} !== undefined \\) item.${this.answers.small_populations} = ${this.answers.small_populations};\n`, 'g');
-    let regEx6 = new RegExp(`${this.answers.small_populations}, `, 'g');
-    resolversFile = resolversFile.toString().replace(regEx4, '');
-    resolversFile = resolversFile.toString().replace(regEx6, '');    
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), resolversFile);
+    // models
+    var ModelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.population}.js`));
+    var parentId = `\n\t${this.answers.small_model}Id: String,`;
+    ModelsFile = ModelsFile.toString().replace(new RegExp(parentId, 'g'), '');
+    this.fs.write(this.destinationPath(`graphql/models/${this.answers.population}.js`), ModelsFile);
     
+    var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`));
+    let fieldText = `${this.answers.small_model}Id: ID\n`;
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
+    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`), typeDefsFile);
+
+    // resolvers
+    var PopulationFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_populations}.js`));
+    var fieldsArray = `\'${this.answers.small_model}Id\', `;
+    PopulationFile = PopulationFile.toString().replace(new RegExp(fieldsArray, 'g'), '');
+    var belongTo = `\'${this.answers.small_model}Id\', `;
+    PopulationFile = PopulationFile.toString().replace(new RegExp(belongTo, 'g'), '');
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_populations}.js`), PopulationFile);
+
+    var MainFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
+    var Model = `\nconst ${this.answers.population} = require\\(\'../models/${this.answers.population}\'\\);`;
+    MainFile = MainFile.toString().replace(new RegExp(Model, 'g'), '');
+    var HasMany = `\\{model: ${this.answers.population}, parentKey: \'${this.answers.small_model}Id\'\\}, `;
+    MainFile = MainFile.toString().replace(new RegExp(HasMany, 'g'), '');
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), MainFile);
+
   }
 
   install() {

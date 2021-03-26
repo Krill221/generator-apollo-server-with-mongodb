@@ -31,31 +31,40 @@ module.exports = class extends Generator {
 
   writing() {
 
-    var text = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
-    var regEx1 = 'new Schema\\({';
-    var regEx1New = `new Schema({\n\t${this.answers.small_populations}: [{\n\t\ttype: Schema.Types.ObjectId, ref: 'Object'\n\t}],`;
-    text = text.toString().replace(new RegExp(regEx1, 'g'), regEx1New);
-    this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), text);
+    // models
+    var ModelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.population}.js`));
+    var regEx1 = new RegExp('new Schema\\({', 'g');
+    ModelsFile = ModelsFile.toString().replace(regEx1, `new Schema({\n\t${this.answers.small_model}Id: String,`);
+    this.fs.write(this.destinationPath(`graphql/models/${this.answers.population}.js`), ModelsFile);
 
-    var text2 = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
-    var regEx2 = `type ${this.answers.model} {`;
-    var regEx2New = `type ${this.answers.model} {\n${this.answers.small_populations}: [ID]`;
-    var regEx3 = `input ${this.answers.model}Input {`;
-    var regEx3New = `input ${this.answers.model}Input {\n${this.answers.small_populations}: [ID]`;
-    text2 = text2.toString().replace(new RegExp(regEx2, 'g'), regEx2New);
-    text2 = text2.toString().replace(new RegExp(regEx3, 'g'), regEx3New);
-    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), text2);
+    // typeDefs
+    var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`));
+    var typeText = `type ${this.answers.population} \{`;
+    var typeTextNew = `type ${this.answers.population} {\n${this.answers.small_model}Id: ID`;
+    var inputText = `input ${this.answers.population}Input \{`;
+    var inputTextNew = `input ${this.answers.population}Input {\n${this.answers.small_model}Id: ID`;
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(typeText, 'g'), typeTextNew);
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(inputText, 'g'), inputTextNew);
+    this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`), typeDefsFile);
 
+    // resolvers
+    var PopulationFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_populations}.js`));
+    var fieldsArray = `const fieldsArray = \\[`;
+    var fieldsArrayNew = `const fieldsArray = [\'${this.answers.small_model}Id\', `;
+    PopulationFile = PopulationFile.toString().replace(new RegExp(fieldsArray, 'g'), fieldsArrayNew);
+    var belongTo = `const belongTo = \\[`;
+    var belongToNew = `const belongTo = [\'${this.answers.small_model}Id\', `;
+    PopulationFile = PopulationFile.toString().replace(new RegExp(belongTo, 'g'), belongToNew);
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_populations}.js`), PopulationFile);
 
-    var text3 = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
-    var regEx4 = `await item.save\\(\\);`;
-    var regEx4New = `if ( ${this.answers.small_populations} !== undefined ) item.${this.answers.small_populations} = ${this.answers.small_populations};\n\t\t\t\tawait item.save();`;
-    var regEx6 = `async update${this.answers.model}\\(_, { input: { `;
-    var regEx6New = `async update${this.answers.model}(_, { input: { ${this.answers.small_populations}, `;
-    text3 = text3.toString().replace( new RegExp(regEx4, 'g'), regEx4New);
-    text3 = text3.toString().replace( new RegExp(regEx6, 'g'), regEx6New);
-    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), text3);
-
+    var MainFile = this.fs.read(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`));
+    var Model = `// key model import`;
+    var ModelNew = `// key model import\nconst ${this.answers.population} = require(\'../models/${this.answers.population}\');`;
+    MainFile = MainFile.toString().replace(new RegExp(Model, 'g'), ModelNew);
+    var HasMany = `const HasMany = \\[`;
+    var HasManyNew = `const HasMany = [{model: ${this.answers.population}, parentKey: \'${this.answers.small_model}Id\'}, `;
+    MainFile = MainFile.toString().replace(new RegExp(HasMany, 'g'), HasManyNew);
+    this.fs.write(this.destinationPath(`graphql/resolvers/${this.answers.small_models}.js`), MainFile);
 
   }
 

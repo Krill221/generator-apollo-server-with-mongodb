@@ -40,6 +40,9 @@ module.exports = class extends Generator {
     var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`));
     let fieldText = `${this.answers.small_model}Id: ID\n`;
     typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
+    var parentId = `${this.answers.small_model}Id: ID`;
+    var parentIdNew = `parentId: ID`;
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(parentId, 'g'), parentIdNew);
     this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`), typeDefsFile);
 
     // resolvers

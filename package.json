@@ -15,6 +15,7 @@
   "author": "Kirill Eropkin <krill221@gmail.com> (https://github.com/krill221)",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.21.1",
     "pluralize": "^8.0.0",
     "yeoman-generator": "^4.10.1"
   },

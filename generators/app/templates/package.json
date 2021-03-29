@@ -12,11 +12,11 @@
     "add-model": "yo apollo-server-with-mongodb:add-model",
     "delete-model": "yo apollo-server-with-mongodb:delete-model",
     "add-fields": "yo apollo-server-with-mongodb:add-fields",
-    "add-estimates": "yo apollo-server-with-mongodb:add-estimates",
     "delete-fields": "yo apollo-server-with-mongodb:delete-fields",
-    "delete-estimates": "yo apollo-server-with-mongodb:delete-estimates",
     "add-has-many": "yo apollo-server-with-mongodb:add-has-many",
-    "delete-has-many": "yo apollo-server-with-mongodb:delete-has-many"
+    "delete-has-many": "yo apollo-server-with-mongodb:delete-has-many",
+    "add-has-estime": "yo apollo-server-with-mongodb:add-has-estime",
+    "delete-has-estime": "yo apollo-server-with-mongodb:delete-has-estime"
   },
   "keywords": [],
   "dependencies": {

@@ -3,11 +3,14 @@
 #yarn delete-fields Post body:String img:String
 #yarn add-has-many Post Comment
 #yarn delete-has-many Post Comment
-#yarn add-estimates Post like:Float stars:Float
-#yarn delete-estimates Post like:Float stars:Float
+#yarn add-has-estime Post Like
+#yarn delete-has-estime Post Like
 
-
-# Simple text chat (with chat rooms and messages)
+# 1. TEXT CHAT (with chat rooms and messages)
 #yarn add-model Room name:String
 #yarn add-model Message text:String
 #yarn add-has-many Room Message
+
+# 2. LIKES (add to model)
+#yarn add-model Like value:String userId:ID
+#yarn add-has-estime Room Like

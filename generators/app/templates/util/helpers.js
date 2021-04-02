@@ -6,7 +6,10 @@ module.exports = {
     async Find(Model, params = {}, belongTo = [], delayTime = 0) {
         if (delayTime !== 0) await timeout(delayTime);
         const keys = Object.keys(params).length;
-        const belongParams = (keys === 0) ? {} : Object.fromEntries(new Map(belongTo.map(i => [i, params[i]])));
+        const belongParams = (keys === 0) ? {} : Object.fromEntries(new Map(belongTo
+            .map(i => [i, params[i]])
+            .filter(i => i[1] !== undefined)
+        ));
         let items = await Model.find(belongParams).sort({ createdAt: 1 });
         return items;
     },

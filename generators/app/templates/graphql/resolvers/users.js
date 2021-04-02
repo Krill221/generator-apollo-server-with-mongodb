@@ -8,7 +8,7 @@ const { UserInputError } = require('apollo-server');
 const { validateRegisterInput, validateLoginInput } = require('../../util/validators');
 
 const belongTo = [''];
-const fieldsArray = ['username', 'email', 'password'];
+const fieldsArray = ['avatar', 'username', 'email', 'password'];
 const HasMany = [];
 const timeDaley = 0;
 

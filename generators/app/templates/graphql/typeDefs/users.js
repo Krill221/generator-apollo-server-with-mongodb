@@ -1,6 +1,7 @@
 module.exports = {
 Type: `
 type User {
+avatar: String
 email: String
 token: String
 username: String
@@ -18,6 +19,7 @@ confirmPassword: String!
 email: String!
 }
 input UserInput {
+avatar: String
 username: String
 email: String
 password: String

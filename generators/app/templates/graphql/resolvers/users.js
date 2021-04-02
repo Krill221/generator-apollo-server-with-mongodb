@@ -35,33 +35,10 @@ module.exports = {
 		},
 	},
 	Mutation: {
-		async updateUser(_, {
-			input: {
-				id,
-				username,
-				email,
-				password,
-			}
-		}, context) {
+		async updateUser(_, { input: params }, context) {
 			try {
-				if (password !== '' && password !== undefined) password = await bcrypt.hash(password, 12);
-				let item;
-				const now = new Date().toISOString();
-				if (!id || id.includes('new')) {
-					item = new MainModel({ createdAt: now });
-				} else {
-					item = await MainModel.findById(id);
-				}
-				if (item) {
-					if (username !== undefined) item.username = username;
-					if (email !== undefined) item.email = email;
-					if (password != '') item.password = password;
-					item.updatedAt = now;
-					await item.save();
-					return item;
-				} else {
-					throw new Error('no item');
-				}
+				if (params.password !== '' && params.password !== undefined) params.password = await bcrypt.hash(params.password, 12);
+				return Helper.Update(MainModel, params, fieldsArray, HasMany, timeDaley);
 			} catch (err) {
 				throw new Error(err);
 			}

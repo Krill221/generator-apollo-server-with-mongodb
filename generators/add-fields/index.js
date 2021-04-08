@@ -30,8 +30,8 @@ module.exports = class extends Generator {
     
     // models
     var ModelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.model}.js`));
-    var regEx1 = new RegExp('new Schema\\({', 'g');
-    ModelsFile = ModelsFile.toString().replace(regEx1, `new Schema({\n\t${this.answers.fields.map(f => ( (f[1] === 'ID') ? `${f[0]}: {type: Schema.Types.ObjectId, ref: 'Object'}` : `${f[0]}: ${f[1]}`) ).join(',\n\t')},`);
+    var regEx1 = new RegExp('// gen fields', 'g');
+    ModelsFile = ModelsFile.toString().replace(regEx1, `// gen fields\n\t${this.answers.fields.map(f => ( (f[1] === 'ID') ? `${f[0]}: {type: Schema.Types.ObjectId, ref: 'Object'}` : `${f[0]}: ${f[1]}`) ).join(',\n\t')},`);
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), ModelsFile);
 
     // typeDefs

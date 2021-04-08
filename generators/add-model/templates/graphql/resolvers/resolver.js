@@ -22,7 +22,7 @@ module.exports = {
 	Mutation: {
 		async update<%=model%>(_, { input: params }, context) {
 			try {
-				return Helper.Update(MainModel, params, fieldsArray, HasMany, timeDaley);
+				return Helper.Update(MainModel, params, belongTo, fieldsArray, HasMany, timeDaley);
 				//return Helper.UpdateEstimate(MainModel, params, belongTo, fieldsArray, HasMany, context, timeDaley);
 			} catch (err) {
 				throw new Error(err);

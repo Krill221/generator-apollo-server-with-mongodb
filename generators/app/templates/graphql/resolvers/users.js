@@ -1,6 +1,7 @@
 const Helper = require('../../util/helpers.js');
 const MainModel = require('../models/User');
 // key model import
+const Message = require('../models/Message');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -9,7 +10,7 @@ const { validateRegisterInput, validateLoginInput } = require('../../util/valida
 
 const belongTo = [''];
 const fieldsArray = ['avatar', 'username', 'email', 'password'];
-const HasMany = [];
+const HasMany = [{model: Message, parentKey: 'userId'}, ];
 const timeDaley = 0;
 
 function generateToken(user) {
@@ -38,7 +39,7 @@ module.exports = {
 		async updateUser(_, { input: params }, context) {
 			try {
 				if (params.password !== '' && params.password !== undefined) params.password = await bcrypt.hash(params.password, 12);
-				return Helper.Update(MainModel, params, fieldsArray, HasMany, timeDaley);
+				return Helper.Update(MainModel, params, belongTo, fieldsArray, HasMany, timeDaley);
 			} catch (err) {
 				throw new Error(err);
 			}

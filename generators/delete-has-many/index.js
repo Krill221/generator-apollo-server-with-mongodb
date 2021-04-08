@@ -33,16 +33,23 @@ module.exports = class extends Generator {
 
     // models
     var ModelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.population}.js`));
-    var parentId = `\n\t${this.answers.small_model}Id: String,`;
-    ModelsFile = ModelsFile.toString().replace(new RegExp(parentId, 'g'), '');
+    var modelQ = `\n\t${this.answers.small_model}Id: \\{ type: Schema.Types.ObjectId, ref: \'${this.answers.model}\' \\},`;
+    ModelsFile = ModelsFile.toString().replace(new RegExp(modelQ, 'g'), '');
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.population}.js`), ModelsFile);
     
     var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`));
-    let fieldText = `${this.answers.small_model}Id: ID\n`;
-    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
+    
+    let fieldType = `${this.answers.small_model}Id: ${this.answers.model}\n`;
+    console.log(fieldType);
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldType, 'g'), '');
+
+    let fieldInput = `${this.answers.small_model}Id: ID\n`;
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldInput, 'g'), '');
+
     var parentId = `${this.answers.small_model}Id: ID`;
     var parentIdNew = `parentId: ID`;
     typeDefsFile = typeDefsFile.toString().replace(new RegExp(parentId, 'g'), parentIdNew);
+
     this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`), typeDefsFile);
 
     // resolvers

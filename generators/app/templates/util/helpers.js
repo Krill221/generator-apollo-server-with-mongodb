@@ -3,6 +3,7 @@ const checkAuth = require('./check-auth');
 const timeout = ms => new Promise(res => setTimeout(res, ms))
 
 module.exports = {
+
     async Find(Model, params = {}, belongTo = [], delayTime = 0) {
         if (delayTime !== 0) await timeout(delayTime);
         const keys = Object.keys(params).length;
@@ -10,11 +11,11 @@ module.exports = {
             .map(i => [i, params[i]])
             .filter(i => i[1] !== undefined)
         ));
-        let items = await Model.find(belongParams).sort({ createdAt: 1 });
+        let items = await Model.find(belongParams).populate(belongTo.join(' ')).sort({ createdAt: 1 });
         return items;
     },
 
-    async Update(Model, params = {}, fieldsArray = [], hasMany = [], delayTime = 0) {
+    async Update(Model, params = {}, belongTo = [], fieldsArray = [], hasMany = [], delayTime = 0) {
         if (delayTime !== 0) await timeout(delayTime);
         let item;
         const now = new Date().toISOString();
@@ -34,6 +35,7 @@ module.exports = {
                 if (params[field] !== undefined) item[field] = params[field];
             });
             item.updatedAt = now;
+            await item.populate(belongTo.join(' ')).execPopulate();
             await item.save();
             return item;
         } else {

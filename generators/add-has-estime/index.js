@@ -33,14 +33,14 @@ module.exports = class extends Generator {
 
     // models
     var ModelsFile = this.fs.read(this.destinationPath(`graphql/models/${this.answers.population}.js`));
-    var regEx1 = new RegExp('new Schema\\({', 'g');
-    ModelsFile = ModelsFile.toString().replace(regEx1, `new Schema({\n\t${this.answers.small_model}Id: String,`);
+    var regEx1 = new RegExp('// gen fields', 'g');
+    ModelsFile = ModelsFile.toString().replace(regEx1, `// gen fields\n\t${this.answers.small_model}Id: { type: Schema.Types.ObjectId, ref: '${this.answers.model}' },`);
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.population}.js`), ModelsFile);
 
     // typeDefs
     var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`));
     var typeText = `type ${this.answers.population} \{`;
-    var typeTextNew = `type ${this.answers.population} {\n${this.answers.small_model}Id: ID`;
+    var typeTextNew = `type ${this.answers.population} {\n${this.answers.small_model}Id: ${this.answers.model}`;
     var inputText = `input ${this.answers.population}Input \{`;
     var inputTextNew = `input ${this.answers.population}Input {\n${this.answers.small_model}Id: ID`;
     var parentId = `parentId: ID`;

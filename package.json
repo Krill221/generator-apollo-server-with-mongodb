@@ -1,6 +1,6 @@
 {
   "name": "generator-apollo-server-with-mongodb",
-  "version": "0.1.1",
+  "version": "1.2.0",
   "description": "Yeoman generator for apollo graphql server with mongodb",
   "homepage": "https://github.com/krill221/generator-apollo-server-with-mongodb",
   "main": "index.js",

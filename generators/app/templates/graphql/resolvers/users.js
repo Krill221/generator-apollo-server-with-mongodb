@@ -1,7 +1,6 @@
 const Helper = require('../../util/helpers.js');
 const MainModel = require('../models/User');
 // key model import
-const Message = require('../models/Message');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -10,7 +9,7 @@ const { validateRegisterInput, validateLoginInput } = require('../../util/valida
 
 const belongTo = [''];
 const fieldsArray = ['avatar', 'username', 'email', 'password'];
-const HasMany = [{model: Message, parentKey: 'userId'}, ];
+const HasMany = [];
 const timeDaley = 0;
 
 function generateToken(user) {

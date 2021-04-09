@@ -19,7 +19,7 @@ module.exports = {
         if (delayTime !== 0) await timeout(delayTime);
         let item;
         const now = new Date().toISOString();
-        if (!params.id || params.id.includes('new')) {
+        if (!params.id || params.id.includes('abc')) {
             item = new Model({ createdAt: now });
             // Change parent
             hasMany.forEach(async fields => {

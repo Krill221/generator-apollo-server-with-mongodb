@@ -64,7 +64,7 @@ module.exports = {
         if (hasItems.length !== 0) return hasItems[0];
 
         // update
-        return await this.Update(Model, params, fieldsArray, hasMany, delayTime);
+        return await this.Update(Model, params, belongTo, fieldsArray, hasMany, delayTime);
     },
 
     location(item, name, location, _) {

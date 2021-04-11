@@ -60,10 +60,12 @@ module.exports = {
         const keys = Object.keys(params).length;
         const belongParams = (keys === 0) ? {} : Object.fromEntries(new Map(belongTo.map(i => [i, params[i]])));
         belongParams.userId = params.userId;
-        let hasItems = await Model.find(belongParams);
-        if (hasItems.length !== 0) return hasItems[0];
-
-        // update
+        let hasItems = await Model.find(belongParams).populate(belongTo.join(' '));
+        // has one and params id new return
+        if (!params.id || params.id.includes('abc') && hasItems.length !== 0) {
+            return hasItems[0];
+        }
+        // update value and return
         return await this.Update(Model, params, belongTo, fieldsArray, hasMany, delayTime);
     },
 

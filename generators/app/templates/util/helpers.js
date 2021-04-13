@@ -1,3 +1,4 @@
+const { attempt } = require('bluebird');
 const checkAuth = require('./check-auth');
 
 const timeout = ms => new Promise(res => setTimeout(res, ms))
@@ -11,7 +12,10 @@ module.exports = {
             .map(i => [i, params[i]])
             .filter(i => i[1] !== undefined)
         ));
-        let items = await Model.find(belongParams).populate(belongTo.join(' ')).sort({ createdAt: 1 });
+
+        let populate = belongTo.map((item) => ({ path: item }))
+        let items = await Model.find(belongParams).sort({ createdAt: 1 }).populate(populate);
+
         return items;
     },
 
@@ -36,6 +40,12 @@ module.exports = {
             });
             item.updatedAt = now;
             await item.populate(belongTo.join(' ')).execPopulate();
+            // if populate not work (for client side new item)
+            belongTo.forEach(async field => {
+                if (item[field] === null) {
+                    item[field] = { _id: params[field] }
+                }
+            });
             await item.save();
             return item;
         } else {

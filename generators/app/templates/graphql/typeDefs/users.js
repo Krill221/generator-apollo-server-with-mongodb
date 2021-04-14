@@ -24,7 +24,7 @@ typeDef = {
     `,
     Query: `${Model}Where(parentId: ID, ${fieldsParent.join(',')}): [${Model}]`,
     Mutation: `
-        delete${Model}(input: OrderitemInput): ${Model}!
+        delete${Model}(input: ${Model}Input): ${Model}!
         update${Model}(input: ${Model}Input): ${Model}!
         register(registerInput: RegisterInput): ${Model}!
         login(username: String!, password: String!): ${Model}!

@@ -15,7 +15,7 @@ typeDef = {
     Type: `type ${Model} { ${fieldsPopulate.join(' ')} ${fields.join(' ')} id: ID createdAt: String updatedAt: String }`,
     Input: `input ${Model}Input { ${fieldsParent.join(' ')} ${fields.join(' ')} id: ID }`,
     Query: `${Model}Where(parentId: ID, ${fieldsParent.join(',')}): [${Model}]`,
-    Mutation: `delete${Model}(input: OrderitemInput): ${Model}! update${Model}(input: ${Model}Input): ${Model}!`
+    Mutation: `delete${Model}(input: ${Model}Input): ${Model}! update${Model}(input: ${Model}Input): ${Model}!`
 }
 
 module.exports = typeDef;

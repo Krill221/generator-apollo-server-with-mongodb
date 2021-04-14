@@ -1,4 +1,5 @@
 #yarn add-model Post name:String desc:String
+#yarn delete-model Post
 #yarn add-fields Post body:String img:String
 #yarn delete-fields Post body:String img:String
 #yarn add-has-many Post Comment

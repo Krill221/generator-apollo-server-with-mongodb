@@ -40,7 +40,7 @@ module.exports = class extends Generator {
       modelFile = modelFile.toString().replace(regEx1ID, '');
       modelFile = modelFile.toString().replace(regEx2ID, '');
 
-      let fieldText = `${f[0]}: ${f[1]}\n`;
+      let fieldText = `'${f[0]}: ${f[1]}',\n`;
       typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
     });
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.model}.js`), modelFile);

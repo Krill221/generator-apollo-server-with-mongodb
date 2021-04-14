@@ -1,38 +1,34 @@
-module.exports = {
-Type: `
-type User {
-avatar: String
-email: String
-token: String
-username: String
-password: String
-id: ID
-createdAt: String
-updatedAt: String
+const Model = 'User';
+const fields = [
+    'avatar: String',
+    'email: String',
+    'username: String',
+    'password: String',
+]
+const fieldsPopulate = [
+]
+
+const fieldsParent = [
+]
+
+typeDef = {
+    Type: `type ${Model} { ${fieldsPopulate.join(' ')} ${fields.join(' ')} token: String id: ID createdAt: String updatedAt: String }`,
+    Input: `
+        input ${Model}Input { ${fieldsParent.join(' ')} ${fields.join(' ')} id: ID }
+        input RegisterInput {
+            username: String!
+            password: String!
+            confirmPassword: String!
+            email: String!
+        }
+    `,
+    Query: `${Model}Where(parentId: ID, ${fieldsParent.join(',')}): [${Model}]`,
+    Mutation: `
+        delete${Model}(input: OrderitemInput): ${Model}!
+        update${Model}(input: ${Model}Input): ${Model}!
+        register(registerInput: RegisterInput): ${Model}!
+        login(username: String!, password: String!): ${Model}!
+    `
 }
-`,
-Input: `
-input RegisterInput {
-username: String!
-password: String!
-confirmPassword: String!
-email: String!
-}
-input UserInput {
-avatar: String
-username: String
-email: String
-password: String
-id: ID
-}
-`,
-Query: `
-UserWhere(parentId: ID): [User]
-`,
-Mutation: `
-deleteUser(input: UserInput): User!
-updateUser(input: UserInput): User!
-register(registerInput: RegisterInput): User!
-login(username: String!, password: String!): User!
-`
-}
+
+module.exports = typeDef;

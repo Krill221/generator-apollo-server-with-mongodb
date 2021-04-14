@@ -37,12 +37,12 @@ module.exports = class extends Generator {
     ModelsFile = ModelsFile.toString().replace(new RegExp(parentId, 'g'), '');
     this.fs.write(this.destinationPath(`graphql/models/${this.answers.population}.js`), ModelsFile);
     
+    // typeDef
     var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`));
-    let fieldText = `${this.answers.small_model}Id: ID\n`;
-    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldText, 'g'), '');
-    var parentId = `${this.answers.small_model}Id: ID`;
-    var parentIdNew = `parentId: ID`;
-    typeDefsFile = typeDefsFile.toString().replace(new RegExp(parentId, 'g'), parentIdNew);
+    var fieldsParent = `'${this.answers.small_model}Id: ID',\n`;
+    var fieldsPopulate = `'${this.answers.small_model}Id: ${this.answers.model}',\n`;
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldsParent, 'g'), '');
+    typeDefsFile = typeDefsFile.toString().replace(new RegExp(fieldsPopulate, 'g'), '');
     this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_populations}.js`), typeDefsFile);
 
     // resolvers

@@ -36,12 +36,9 @@ module.exports = class extends Generator {
 
     // typeDefs
     var typeDefsFile = this.fs.read(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`));
-    var typeText = `type ${this.answers.model} \{`;
-    var typeTextNew = `type ${this.answers.model} {\n${this.answers.fields.map(f => `${f[0]}: ${f[1]}`).join('\n')}`;
-    var inputText = `input ${this.answers.model}Input \{`;
-    var inputTextNew = `input ${this.answers.model}Input {\n${this.answers.fields.map(f => `${f[0]}: ${f[1]}`).join('\n')}`;
+    var typeText = `// gen fieldsArray`;
+    var typeTextNew = `// gen fieldsArray\n${this.answers.fields.map(f => `'${f[0]}: ${f[1]}'`).join(',')},`;
     typeDefsFile = typeDefsFile.toString().replace(new RegExp(typeText, 'g'), typeTextNew);
-    typeDefsFile = typeDefsFile.toString().replace(new RegExp(inputText, 'g'), inputTextNew);
     this.fs.write(this.destinationPath(`graphql/typeDefs/${this.answers.small_models}.js`), typeDefsFile);
 
     // resolvers

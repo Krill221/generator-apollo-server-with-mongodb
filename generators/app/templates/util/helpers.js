@@ -39,11 +39,15 @@ module.exports = {
                 if (params[field] !== undefined) item[field] = params[field];
             });
             item.updatedAt = now;
+
             await item.populate(belongTo.join(' ')).execPopulate();
             // if populate not work (for client side new item)
             belongTo.forEach(async field => {
                 if (item[field] === null) {
-                    item[field] = { _id: params[field] }
+                    await item.depopulate(field).execPopulate();
+                    let objId = item[field];
+                    await item.populate(field).execPopulate();
+                    item[field] = { _id: objId }
                 }
             });
             await item.save();

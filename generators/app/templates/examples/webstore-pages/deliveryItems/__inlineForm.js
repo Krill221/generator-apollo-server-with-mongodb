@@ -51,7 +51,6 @@ const Item = ({ item, isNew, update, setActive }) => {
             labels={['']}
             tabs={[
                 <Typography>{item.productId.name}</Typography>,
-                <Typography>$ {item.productId.price}</Typography>,
                 <Typography>sum: {item.productId.price * item.value}</Typography>,
             ]
             }

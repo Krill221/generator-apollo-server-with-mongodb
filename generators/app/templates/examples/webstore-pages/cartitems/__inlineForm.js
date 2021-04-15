@@ -19,8 +19,8 @@ import {
 import {
     //CreateComponent,
     //ItemsComponent
- } from '../../__components/itemsComponent';
- import {
+} from '../../__components/itemsComponent';
+import {
     //LikesButton,
     //LikesCountComponent,
 } from '../../__components/estimeComponent';
@@ -44,7 +44,7 @@ import { Typography } from '@material-ui/core';
 const Item = ({ item, isNew, update, setActive }) => {
 
     //const theme = useTheme();
-    
+
     return <Form validationSchema={validationSchema} item={item} onSubmit={(newItem) => {
         update(newItem);
     }}>
@@ -52,8 +52,9 @@ const Item = ({ item, isNew, update, setActive }) => {
             labels={['']}
             tabs={[
                 <Typography>{item.productId.name}</Typography>,
-                <Typography>$ {item.productId.price}</Typography>,
-                <Typography>sum: {item.productId.price * item.value}</Typography>,
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {item.productId.desc}
+                </Typography>,
                 <FieldText
                     modelName={modelName}
                     name={'value'}
@@ -61,7 +62,8 @@ const Item = ({ item, isNew, update, setActive }) => {
                     onBlur={props.handleSubmit}
                     onChange={props.handleChange}
                 />,
-                
+                <Typography>${item.productId.price * item.value}</Typography>,
+
             ]
             }
         />

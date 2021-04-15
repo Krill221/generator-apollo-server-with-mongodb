@@ -28,9 +28,14 @@ import InlineForm from '../deliveryItems/__inlineForm';
 import InlineForm2 from '../deliveryItems/__inlineForm2';
 import DeleteForm from '../deliveryItems/__deleteForm';
 import qMain from '../../queries/orderitems.js';
+import { useSumHook } from '../../__components/estimeComponent';
+import { Typography } from '@material-ui/core';
 
 const Item = ({ item, isNew, update, setActive }) => {
     const { user } = useContext(AuthContext);
+
+    const itemsSum = useSumHook( qMain, { orderId: item.id, userId: user?.id }, ['value', 'productId.price'], 'multiply');
+
 
     return <Form validationSchema={validationSchema} item={item} onSubmit={(newItem) => {
         update(newItem);
@@ -40,7 +45,7 @@ const Item = ({ item, isNew, update, setActive }) => {
             tabs={[
                 <ItemsComponent
                     query={qMain}
-                    parentObjects={{orderId: item.id, user: user?.id}}
+                    parentObjects={{ orderId: item.id, user: user?.id }}
                     ItemsView={ItemsView}
                     ItemView={ItemView}
                     EditForm={null}
@@ -53,7 +58,10 @@ const Item = ({ item, isNew, update, setActive }) => {
                         deletable: false
                     }}
                 />,
-                
+                <Typography variant="h5" component="h2">
+                    Total: {itemsSum}
+                </Typography>,
+
             ]
             }
         />

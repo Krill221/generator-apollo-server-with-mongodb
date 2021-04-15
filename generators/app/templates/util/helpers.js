@@ -42,14 +42,14 @@ module.exports = {
 
             await item.populate(belongTo.join(' ')).execPopulate();
             // if populate not work (for client side new item)
-            belongTo.forEach(async field => {
+            for (const field of belongTo) {
                 if (item[field] === null) {
                     await item.depopulate(field).execPopulate();
                     let objId = item[field];
                     await item.populate(field).execPopulate();
                     item[field] = { _id: objId }
                 }
-            });
+            }
             await item.save();
             return item;
         } else {

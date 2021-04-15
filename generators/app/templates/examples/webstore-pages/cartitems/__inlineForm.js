@@ -39,7 +39,7 @@ import {
     //ItemCard as ItemView,
     //ItemList as ItemView,
 } from '../../__views/ItemView';
-import { Typography } from '@material-ui/core';
+import { Avatar, CardHeader, Typography } from '@material-ui/core';
 
 const Item = ({ item, isNew, update, setActive }) => {
 
@@ -51,10 +51,10 @@ const Item = ({ item, isNew, update, setActive }) => {
         {props => <LayoutView
             labels={['']}
             tabs={[
-                <Typography>{item.productId.name}</Typography>,
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {item.productId.desc}
-                </Typography>,
+                <CardHeader
+                    title={item.productId.name}
+                    subheader={item.productId.desc}
+                />,
                 <FieldText
                     modelName={modelName}
                     name={'value'}

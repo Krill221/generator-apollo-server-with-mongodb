@@ -13,7 +13,8 @@ import {
 import {
     //Table as ItemsView,
     //Grid as ItemsView,
-    List as ItemsView,
+    Grid12 as ItemsView,
+    //List as ItemsView,
 } from '../../__views/ItemsView';
 import {
     //ItemTable as ItemView,

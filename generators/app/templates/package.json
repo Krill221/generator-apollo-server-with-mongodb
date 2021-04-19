@@ -33,7 +33,7 @@
     "petrovich": "^0.2.1",
     "urldecode": "^1.0.1",
     "uuid": "^8.3.2",
-    "yandex-checkout": "^1.0.13"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",

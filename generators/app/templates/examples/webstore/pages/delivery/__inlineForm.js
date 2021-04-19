@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { AuthContext } from '../../__providers/authProvider';
 import {
-    validationSchema
+    modelName, validationSchema
 } from '../orders/schema';
 import Form from '../../__components/helpers/FormikEdit';
 import {
@@ -30,11 +30,13 @@ import DeleteForm from '../deliveryItems/__deleteForm';
 import qMain from '../../queries/orderitems.js';
 import { useSumHook } from '../../__components/estimeComponent';
 import { Typography } from '@material-ui/core';
+import FieldButtonPayYoo from '../../__components/fields/FieldButtonPayYoo';
+
 
 const Item = ({ item, isNew, update, setActive }) => {
     const { user } = useContext(AuthContext);
 
-    const itemsSum = useSumHook( qMain, { orderId: item.id, userId: user?.id }, ['value', 'productId.price'], 'multiply');
+    const itemsSum = useSumHook(qMain, { orderId: item.id, userId: user?.id }, ['value', 'productId.price'], 'multiply');
 
 
     return <Form validationSchema={validationSchema} item={item} onSubmit={(newItem) => {
@@ -58,8 +60,15 @@ const Item = ({ item, isNew, update, setActive }) => {
                         deletable: false
                     }}
                 />,
+                <FieldButtonPayYoo
+                    modelName={modelName}
+                    orderId={item.id}
+                    userEmail={user?.email}
+                    yooShopId={727796}
+                    sum={itemsSum}
+                />,
                 <Typography variant="h5" component="h2">
-                    Total: {itemsSum}
+                    Total: ${itemsSum}
                 </Typography>,
 
             ]

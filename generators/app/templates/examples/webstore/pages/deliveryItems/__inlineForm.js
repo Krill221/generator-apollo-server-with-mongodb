@@ -1,11 +1,10 @@
 import React from 'react';
 //import { useTheme } from '@material-ui/core/styles';
 import {
-    modelName,
+    //modelName,
     validationSchema
 } from '../orderitems/schema';
 import Form from '../../__components/helpers/FormikEdit';
-import FieldText from '../../__components/fields/FieldText';
 //import FieldTextWithSubmit from '../../__components/fields/FieldTextWithSubmit';
 
 import {
@@ -19,8 +18,8 @@ import {
 import {
     //CreateComponent,
     //ItemsComponent
-} from '../../__components/itemsComponent';
-import {
+ } from '../../__components/itemsComponent';
+ import {
     //LikesButton,
     //LikesCountComponent,
 } from '../../__components/estimeComponent';
@@ -39,31 +38,20 @@ import {
     //ItemCard as ItemView,
     //ItemList as ItemView,
 } from '../../__views/ItemView';
-import { Avatar, CardHeader, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 const Item = ({ item, isNew, update, setActive }) => {
 
     //const theme = useTheme();
-
+    
     return <Form validationSchema={validationSchema} item={item} onSubmit={(newItem) => {
         update(newItem);
     }}>
         {props => <LayoutView
             labels={['']}
             tabs={[
-                <CardHeader
-                    title={item.productId.name}
-                    subheader={item.productId.desc}
-                />,
-                <FieldText
-                    modelName={modelName}
-                    name={'value'}
-                    formikProps={props}
-                    onBlur={props.handleSubmit}
-                    onChange={props.handleChange}
-                />,
+                <Typography>{item.productId.name}</Typography>,
                 <Typography>${item.productId.price * item.value}</Typography>,
-
             ]
             }
         />

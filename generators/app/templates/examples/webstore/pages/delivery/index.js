@@ -9,7 +9,7 @@ import {
     Grid12 as LayoutView,
 } from '../../__views/LayoutView';
 import {
-    Grid as ItemsView,
+    Grid12 as ItemsView,
 } from '../../__views/ItemsView';
 import {
     ItemCard as ItemView,

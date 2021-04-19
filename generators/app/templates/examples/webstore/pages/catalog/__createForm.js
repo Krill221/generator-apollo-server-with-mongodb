@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { AuthContext } from '../../__providers/authProvider';
 import { useTheme } from '@material-ui/core/styles';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
     modelName,
     validationSchema
@@ -32,11 +32,9 @@ import { ItemsComponent } from '../../__components/itemsComponent';
 import InlineForm from '../cartitems/__inlineForm';
 import InlineForm2 from '../cartitems/__inlineForm2';
 import DeleteForm from '../cartitems/__deleteForm';
-import qMain from '../../queries/orders.js';
 import qOrderItems from '../../queries/orderitems.js';
 import { Typography } from '@material-ui/core';
 import { useSumHook } from '../../__components/estimeComponent';
-import FieldButtonPayYoo from '../../__components/fields/FieldButtonPayYoo';
 
 
 const Item = ({ item, add, setActive }) => {
@@ -45,7 +43,6 @@ const Item = ({ item, add, setActive }) => {
     const { user } = useContext(AuthContext);
     const itemsSum = useSumHook(qOrderItems, { orderId: item.id, userId: user?.id }, ['value', 'productId.price'], 'multiply');
     let history = useHistory();
-    let location = useLocation();
 
     return <Form validationSchema={validationSchema} item={item} onSubmit={(newItem) => {
         add(newItem);
@@ -90,7 +87,6 @@ const Item = ({ item, add, setActive }) => {
                     onClick={props.handleSubmit}
                 />,
                 <br />
-
             ]
             }
         />

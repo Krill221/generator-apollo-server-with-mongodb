@@ -8,3 +8,8 @@ yarn add-has-many User Message
 yarn add-model Like value:String
 yarn add-has-many User Like
 yarn add-has-estime Message Like
+
+# 3. Copy pages to /src/pages
+
+# add to Menu.js
+# chats

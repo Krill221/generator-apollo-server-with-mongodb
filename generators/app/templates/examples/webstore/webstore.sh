@@ -8,12 +8,12 @@ yarn add-has-estime Order OrderItem
 yarn add-has-many User OrderItem
 yarn add-has-many User Order
 
-# move webstore-pages to pages
+# 3. Copy pages to /src/pages
 
 #add to App.js
 #<PublicMainLayout path="/catalog" component={Catalog} /> 
 #<PrivateMainLayout path="/delivery" component={Delivery} /> 
 
-#add to Menu.js
+# add to Menu.js
 # catalog
 # delivery

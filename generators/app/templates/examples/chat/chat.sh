@@ -5,5 +5,6 @@ yarn add-has-many Chat Message
 yarn add-has-many User Message
 
 # 2. LIKES (add to model)
-yarn add-model Like value:String userId:ID
+yarn add-model Like value:String
+yarn add-has-many User Like
 yarn add-has-estime Message Like

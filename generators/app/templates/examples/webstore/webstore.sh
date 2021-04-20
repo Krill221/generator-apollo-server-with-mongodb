@@ -12,10 +12,8 @@ yarn add-has-many User Order
 
 #add to App.js
 #<PublicMainLayout path="/catalog" component={Catalog} /> 
-#<PrivateMainLayout path="/cart" component={Cart} /> 
 #<PrivateMainLayout path="/delivery" component={Delivery} /> 
 
 #add to Menu.js
 # catalog
-# cart
 # delivery
